@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Register;
 use App\Models\MetaHiUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
 
     private const DIRECTORY = "public/profile_pictures";
 
-    public function updateImage(Request $request)
+    public function updateImage(Request $request) : JsonResponse
     {
         $uid = $request->header("X-Google-UID");
         $fcm = $request->header("X-Google-FCM");
@@ -33,8 +35,13 @@ class UserController extends Controller
         try{
             $file->storeAs(self::DIRECTORY, $file_name);
 
-            $user = MetaHiUser::firstOrFail(["uid" => $uid]);
+            $user = $request->user();
+            
+            $image_to_delete = $user->image_path;
+            // Storage::delete($image_to_delete);
+            
             $user->image_path = "storage/profile_pictures/". $file_name;
+            $user->fcm_token = $fcm;
             $user->save();
             
         } catch (\Exception $e) {
@@ -48,9 +55,5 @@ class UserController extends Controller
             ->json(["result" => "ok"])
             ->setStatusCode(Response::HTTP_NO_CONTENT);
     }
-
-    public function updateUsername(Request $request)
-    {
-        return $request;
-    }
+    
 }

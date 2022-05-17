@@ -18,7 +18,6 @@ class CreateMetaHiUsersTable extends Migration
             $table->string("uid")->nullable();
             $table->string("fcm_token")->nullable();
             $table->string("image_path")->nullable();
-            $table->string("username")->nullable();
             $table->timestamps();
         });
     }

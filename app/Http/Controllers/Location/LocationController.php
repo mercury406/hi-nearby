@@ -65,25 +65,9 @@ class LocationController extends Controller
             ];
         }
 
-        // $users = $locations->map(function($location) use ($distance_service, $request) {
-        //     return [
-        //         "user" => [
-        //             "id" => $location->user->id,
-        //             "username" => $location->user->username,
-        //             "image" => "http://192.168.0.63/".$location->user->image_path
-        //         ],
-        //         "distance" => $distance_service->calculate($location->latitude, $location->longitude),
-        //         "mins_since_last_greeting" => $this->greeting_service->getLastTime($location, $request->user()->id)
-        //     ];
-        // });
-
-        // $users = $users->filter(function($user) {
-        //     return $user["distance"] <= self::MAX_DISTANCE;
-        // });
 
         return response()
-                ->json(["result" => "ok", "users" => $users])
-                // ->json(["result" => "ok", "users" => []])
-                ->setStatusCode(Response::HTTP_CREATED);
+            ->json(["result" => "ok", "users" => $users])
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 }
